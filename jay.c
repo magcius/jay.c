@@ -1,5 +1,6 @@
 
-/* I license this work under the public domain. */
+/* Written by: Jasper St. Pierre <jstpierre@mecheye.net>
+ * I license this work under the public domain. */
 
 #include "jay.h"
 

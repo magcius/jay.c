@@ -1,0 +1,18 @@
+jay.c
+=====
+
+A very simple scanner-based JSON parser which does not use malloc.
+
+Designed for super-simple embedded environments operating on mostly
+known input, without much else to go on. This is a copylib -- include
+into your own projects and compile away. Does not have any
+dependencies outside of the C standard library.
+
+Note that it currently does not support streaming -- it requires the
+entire buffer to be in contiguous memory. This was good enough for
+my own purposes, but for future projects I might extend this to
+support partial loading and streaming of data.
+
+Please see the included example for proper usage.
+
+I license this work into the public domain. Do with it what you want.

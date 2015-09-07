@@ -10,7 +10,7 @@
 #include <string.h>
 
 /* Write code-point cp in CESU-8 form into p */
-static int cesu8_write(uint8_t *p, uint16_t cp) {
+static int cesu8_write(char *p, uint16_t cp) {
     if      (cp <= 0x007f) { *p++ = cp; return 1; }
     else if (cp <= 0x07ff) { *p++ = (0xc0 | (cp >>  6)); *p++ = (0x80 | (cp & 0x3f)); return 2; }
     else                   { *p++ = (0xe0 | (cp >> 12)); *p++ = (0x80 | ((cp >> 6) & 0x3f)); *p++ = (0x80 | (cp & 0x3f)); return 3; }

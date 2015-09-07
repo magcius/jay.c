@@ -1,4 +1,6 @@
 
+CFLAGS = -Wall -Werror -g
+
 all: example
 
 clean:

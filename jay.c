@@ -9,18 +9,14 @@
 #include <stdint.h>
 #include <string.h>
 
-/* Write code-point cp in UTF-8 form into p */
-static int utf8_write(uint8_t *p, uint32_t cp) {
-    if (cp <= 0x00007f) { *p++ = cp; return 1; }
-    if (cp <= 0x0007ff) { *p++ = (0xc0 | (cp >>  6)); *p++ = (0x80 | (cp & 0x3f)); return 2; }
-    if (cp <= 0x00ffff) { *p++ = (0xe0 | (cp >> 12)); *p++ = (0x80 | ((cp >> 6) & 0x3f)); *p++ = (0x80 | (cp & 0x3f)); return 3; }
-    if (cp <= 0x10ffff) { *p++ = (0xf0 | (cp >> 18)); *p++ = (0x80 | ((cp >> 12) & 0x3f)); *p++ = (0x80 | ((cp >> 6) & 0x3f)); *p++ = (0x80 | (cp & 0x3f)); return 4; }
-
-    /* Code points above this point are invalid. */
-    return -1;
+/* Write code-point cp in CESU-8 form into p */
+static int cesu8_write(uint8_t *p, uint16_t cp) {
+    if      (cp <= 0x007f) { *p++ = cp; return 1; }
+    else if (cp <= 0x07ff) { *p++ = (0xc0 | (cp >>  6)); *p++ = (0x80 | (cp & 0x3f)); return 2; }
+    else                   { *p++ = (0xe0 | (cp >> 12)); *p++ = (0x80 | ((cp >> 6) & 0x3f)); *p++ = (0x80 | (cp & 0x3f)); return 3; }
 }
 
-/* Parse a four-digit hex character */
+/* Parse a hex digit */
 static uint8_t dhexd(char c)
 {
     if (c >= '0' && c <= '9') return c - '0';
@@ -29,9 +25,10 @@ static uint8_t dhexd(char c)
     assert(false);
 }
 
-static uint32_t dhex(char *p)
+/* Parse a four-digit hex sequence */
+static uint16_t dhex(char *p)
 {
-    return dhexd(p[0] << 24) | dhexd(p[1] << 16) | dhexd(p[2] << 8) | dhexd(p[3]);
+    return (dhexd(p[0]) << 12) | (dhexd(p[1]) << 8) | (dhexd(p[2]) << 4) | dhexd(p[3]);
 }
 
 /* Scanner */
@@ -143,7 +140,7 @@ static char *get_string(jay_s *j, char *V, int Vl)
             case 't':  V[i++] = '\t'; break;
             case 'u': {
                 uint32_t cp = dhex(j->S+2);
-                i += utf8_write(&V[i], cp);
+                i += cesu8_write(&V[i], cp);
                 break;
             }
             }

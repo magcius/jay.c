@@ -5,7 +5,7 @@
 
 int main(int argc, char *argv[])
 {
-    char *S = "  [ { \"hello\": 3 }, { \"baz\": false } ]";
+    char *S = "  [ { \"hello\": 3 }, { \"baz\": false }, \"blah\u20AC\" ]";
     jay_t _j, *j = &_j;
 
     jay_init(j, S);
@@ -21,6 +21,8 @@ int main(int argc, char *argv[])
     jay_find_object_child(j, "hello");
     jay_print_value(j);
     jay_restore(j);
+    jay_skip(j);
+    jay_next_value(j);
     jay_skip(j);
     jay_next_value(j);
     jay_skip(j);

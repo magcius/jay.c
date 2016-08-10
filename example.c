@@ -5,7 +5,7 @@
 
 int main(int argc, char *argv[])
 {
-    char *S = "  [ { \"hello\": 3 }, { \"baz\": false }, \"blah\u20AC\" ]";
+    char *S = "  [ { \"hello\": 3 }, { \"baz\": false }, \"blah\\u20AC\" ]";
     jay_t _j, *j = &_j;
 
     jay_init(j, S);
@@ -27,4 +27,6 @@ int main(int argc, char *argv[])
     jay_next_value(j);
     jay_skip(j);
     jay_leave_array(j);
+
+    return 0;
 }

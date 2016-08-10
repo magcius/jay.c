@@ -21,8 +21,8 @@ static int cesu8_write(char *p, uint16_t cp) {
 static uint8_t dhexd(char c)
 {
     if (c >= '0' && c <= '9') return c - '0';
-    if (c >= 'a' && c <= 'f') return c - 'a';
-    if (c >= 'A' && c <= 'F') return c - 'A';
+    if (c >= 'a' && c <= 'f') return c - 'a' + 0x0A;
+    if (c >= 'A' && c <= 'F') return c - 'A' + 0x0A;
     assert(false);
 }
 
@@ -140,8 +140,9 @@ static char *get_string(jay_s *j, char *V, int Vl)
             case 'r':  V[i++] = '\r'; break;
             case 't':  V[i++] = '\t'; break;
             case 'u': {
-                uint32_t cp = dhex(j->S+2);
+                uint16_t cp = dhex(j->S+2);
                 i += cesu8_write(&V[i], cp);
+                advn(j, 4);
                 break;
             }
             }
